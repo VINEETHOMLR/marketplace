@@ -61,6 +61,60 @@ class User_token extends MY_Model {
 	      ->result_array();
 	}
 
+	public function check_phone($phone)
+	{
+		  return $this->db->select("*" )
+	      ->where('customer_phone',$phone)
+	      ->get('mv_customer')
+	      ->result_array();
+	}
+
+	public function check_otp($phone,$otp)
+	{
+		  $checkOtp = $this->db->select("*" )
+	      ->where('phone',$phone)
+	      ->get('mv_otp')
+	      ->result_array();
+
+          $time = time();
+          $arr = ['phone'=>$phone,'otp'=>$otp,'created_at'=>$time];
+
+	      if(!empty($checkOtp)) 
+           {
+              $this->db->where('phone',$phone);
+		      $this->db->update('mv_otp',$arr);
+		      return true;
+
+           } else {
+     
+		      $this->db->insert('mv_otp',$arr);
+		      return true;
+           }
+           return false;
+	}
+
+
+	public function verify_otp($phone,$otp)
+	{
+		  $result = $this->db->select("*" )
+	      ->where('phone',$phone)
+	      ->where('otp',$otp)
+	      ->get('mv_otp')
+	      ->row_array();
+
+          if($result)
+          {
+          	$time2 = strtotime("+3 minutes", $result['created_at']);
+          	if(time()<=$time2) 
+          	 {
+                return 1;
+          	 } else {
+                return 2;
+          	 }   
+          }
+          return false;
+	}
+
 
 	
 

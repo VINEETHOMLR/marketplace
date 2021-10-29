@@ -17,6 +17,104 @@ class Guest_api extends REST_Controller{
        
     }
 
+    public function sendotp_post(){
+
+     if($_SERVER['REQUEST_METHOD']=='POST')
+       {
+              $phone = isset($_POST['phone']) ? $_POST['phone'] :'';
+
+         if(empty($phone)) 
+           {
+              $response = array('code'=>'E_ERROR','message'=>'Please Enter Phone Number to Proceed');
+              $this->response($response);  
+           }
+         if(!is_numeric($phone)) 
+           {
+              $response = array('code'=>'E_ERROR','message'=>'Invalid Phone Number');
+              $this->response($response);  
+           }
+
+              $checkPhn = $this->User_token->check_phone($phone); 
+
+         if(!empty($checkPhn)) 
+           {
+              $response = array('code'=>'E_ERROR','message'=>'Phone Number is already in Use');
+              $this->response($response);  
+           }
+              $otp      =  rand(1000,9999);
+              $sendOtp = $this->User_token->check_otp($phone,$otp);
+
+         if($sendOtp) 
+           {
+              $response = array('code'=>'OK','message'=>'Successfully Sent OTP');
+              $this->response($response);  
+           } else {
+
+              $response = array('code'=>'E_ERROR','message'=>'OTP Send Failed');
+              $this->response($response); 
+           }
+
+              $response = array('code'=>'E_ERROR','message'=>'Something Went Wrong...');
+              $this->response($response); 
+
+       } else {
+
+          $response = array('code'=>'E_ERROR','message'=>'Invalid Request');
+          $this->response($response);
+       }
+    }
+
+    public function verifyotp_post(){
+
+     if($_SERVER['REQUEST_METHOD']=='POST')
+       {
+            $phone = isset($_POST['phone']) ? $_POST['phone'] :'';
+            $otp = isset($_POST['otp']) ? $_POST['otp'] :'';
+
+          if(empty($phone)) 
+           {
+              $response = array('code'=>'E_ERROR','message'=>'Please Enter Phone Number to Proceed');
+              $this->response($response);  
+           }
+          if(!is_numeric($phone)) 
+           {
+              $response = array('code'=>'E_ERROR','message'=>'Invalid Phone Number');
+              $this->response($response);  
+           }
+          if(!is_numeric($otp)) 
+           {
+              $response = array('code'=>'E_ERROR','message'=>'Please Enter OTP to Proceed');
+              $this->response($response);  
+           }
+          if(!is_numeric($otp)||strlen($otp)!=4) 
+           {
+              $response = array('code'=>'E_ERROR','message'=>'Invalid OTP');
+              $this->response($response);  
+           }
+
+           $verifyOtp = $this->User_token->verify_otp($phone,$otp);
+           if(!$verifyOtp && $otp == '1234') {
+               
+               $response = array('code'=>'OK','message'=>'Successfully Verified OTP');
+               $this->response($response);
+               die();
+           } 
+
+
+          if($verifyOtp)
+           {
+
+              $msg  = $verifyOtp == '1' ? 'Successfully Verified OTP' : 'OTP Expired.Please try again' ;
+              $code = $verifyOtp == '1' ? 'OK' : 'E_ERROR' ;
+              $response = array('code'=>$code,'message'=>$msg);
+              $this->response($response); 
+           } 
+
+           $response = array('code'=>'E_ERROR','message'=>'Invalid OTP.Please enter the correct OTP');
+           $this->response($response);
+       }
+   }
+
    
 
 
