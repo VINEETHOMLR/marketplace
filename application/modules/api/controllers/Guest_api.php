@@ -684,7 +684,7 @@ function productDetails_get()
 
                 $percentage = $details['product_offer_price']/$details['product_price'];
                 $percentage = $percentage*100;
-                $details['offer_percentage'] = $percentage.'% OFF';
+                $details['offer_percentage'] = number_format($percentage,2).'% OFF';
             }
 
 
