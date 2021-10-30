@@ -41,6 +41,24 @@ class Guest_api extends REST_Controller{
               $response = array('code'=>'E_ERROR','message'=>'Phone Number is already in Use');
               $this->response($response);  
            }
+
+              $previousOtp = $this->User_token->getPreviousOtp($phone);
+              if(!empty($previousOtp)) {
+
+                  $created_at  = $previousOtp['created_at'];
+                  //$time_diff   = time()-$created_at;
+                  $minutes     = round(abs(time() - $created_at) / 60,2);
+                  if($minutes <= 3) {
+                      
+                      $response = array('code'=>'OK','message'=>'Please use the previous OTP');
+                      $this->response($response); 
+                  }
+                  
+
+
+              }
+
+              
               $otp      =  rand(1000,9999);
               $sendOtp = $this->User_token->check_otp($phone,$otp);
 

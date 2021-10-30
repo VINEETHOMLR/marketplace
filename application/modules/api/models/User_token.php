@@ -116,6 +116,15 @@ class User_token extends MY_Model {
 	}
 
 
+	public function getPreviousOtp($phone){
+        
+        return $this->db->select("*" )
+	      ->where('phone',$phone)
+	      ->get('mv_otp')
+	      ->row_array();
+	}
+
+
 	
 
 
