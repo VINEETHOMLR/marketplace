@@ -275,9 +275,16 @@ class User extends REST_Controller{
                                        'is_offer'=>$productDetails['product_is_offer'] == 1 ? 'true':'false'
                         );
                     }
+
+
+                    //store details 
+
                     $store_logo = base_url().'assets/uploads/store/default.png';
-                    $store_logo = $v['store_logo']!="" ? base_url().'assets/uploads/store/'.$v['store_logo'] : $store_logo;
-                    $cartList[]=array('store_id'=>$v['cart_store_id'],'store_name'=>$v['store_name'],'store_logo'=>$store_logo,'list'=>$listArray);
+                    $storDetails = $this->Store_model->get_store_single($value['cart_store_id']);
+                    
+                   
+                     $store_logo = $storDetails['store_logo']!="" ? base_url().'assets/uploads/store/'.$storDetails['store_logo'] : $store_logo;
+                    $cartList[]=array('store_id'=>$value['cart_store_id'],'store_name'=>$storDetails['store_name'],'store_logo'=>$store_logo,'list'=>$listArray);
 
                 }
             }
