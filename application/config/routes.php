@@ -118,3 +118,5 @@ $route[ 'destination-categories-form/(:any)' ]	=	'destination/admin_categories/f
 $route[ 'manage-destination-categories' ]	=	'destination/admin_categories/manage';
 
 $route[ 'forgot-password' ] = 'user/password/forgot_form';
+$route[ 'privacy-policy' ]  = 'pages/privacypolicy';
+$route[ 'terms-and-condition' ]  = 'pages/termsandcondition';

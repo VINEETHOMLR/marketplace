@@ -8,6 +8,18 @@ class Pages extends MX_Controller
 		
 		
     }
+
+    public function privacypolicy(){
+        
+        $data[ 'content' ]	=	'pages/privacypolicy';
+    	$this->load->view( 'public/page2',$data);
+    }
+
+    public function termsandcondition(){
+
+    	echo "Terms and conditions";
+
+    }
 	
 	public function home()
 	{
