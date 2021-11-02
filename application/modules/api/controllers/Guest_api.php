@@ -733,6 +733,12 @@ function productDetails_get()
                 $variantdata[$k] = $variant;
                 $variantdata[$k]['variant_options'] = $variant_option;
             }
+
+
+            $storDetails = $this->Store_model->get_store_single($details['product_store_id']);
+            $details['store_policy'] = $storDetails['return_policy'];
+
+            
             
             $response = array('code'=>'OK','message'=>'Product Details','details'=>$details);
 
